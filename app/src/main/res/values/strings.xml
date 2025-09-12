@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">Simple Note</string>
+    <!-- App-wide -->
+    <string name="app_name">Simple Notes</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_message">Jot Down anything you want to achieve, today or in the future</string>
+    <string name="onboarding_button">Let’s Get Started</string>
+
+    <!-- Authentication -->
+    <!-- Note Details & Management -->
+    <!-- Profile -->
 </resources>
