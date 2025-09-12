@@ -16,6 +16,23 @@
     <string name="login_button_login">Login</string>
     <string name="login_button_register">Don’t have any account? Register here</string>
 
+    <!-- Register -->
+    <string name="register_title">Register</string>
+    <string name="register_description">And start taking notes</string>
+    <string name="register_email_label">Email Address</string>
+    <string name="register_email_placeholder">Example: hamifar.taha@gmail.com</string>
+    <string name="register_firstname_label">First Name</string>
+    <string name="register_firstname_placeholder">Example: Taha</string>
+    <string name="register_lastname_label">Last Name</string>
+    <string name="register_lastname_placeholder">Example: Hamifar</string>
+    <string name="register_username_label">Username</string>
+    <string name="register_username_placeholder">Example: @HamifarTaha</string>
+    <string name="register_password_label">Password</string>
+    <string name="register_password_retype_label">Retype Password</string>
+    <string name="register_password_placeholder">********</string>
+    <string name="register_button_register">Register</string>
+    <string name="register_button_login">Already have an account? Login here</string>
+
 
     <!-- Note Details & Management -->
     <!-- Profile -->
