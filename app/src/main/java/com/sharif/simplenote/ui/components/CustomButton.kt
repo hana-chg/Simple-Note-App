@@ -14,16 +14,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sharif.simplenote.ui.theme.AppTypography
 import com.sharif.simplenote.ui.theme.NeutralBaseGrey
 import com.sharif.simplenote.ui.theme.NeutralLightGrey
 import com.sharif.simplenote.ui.theme.NeutralWhite
 import com.sharif.simplenote.ui.theme.PrimaryBase
 import com.sharif.simplenote.ui.theme.PrimaryDark
 import com.sharif.simplenote.ui.theme.PrimaryLight
-import com.sharif.simplenote.ui.theme.Typography
 
 enum class ButtonType {
     Primary, Secondary, Transparent
@@ -65,20 +64,20 @@ fun CustomButton(
         }
         ButtonType.Secondary -> when (buttonState) {
             ButtonState.Normal -> Triple(NeutralWhite, PrimaryBase, PrimaryBase)
-            ButtonState.Disabled -> Triple(NeutralWhite, PrimaryDark, PrimaryDark)
-            ButtonState.Pressed -> Triple(PrimaryLight, NeutralBaseGrey, NeutralBaseGrey)
+            ButtonState.Disabled -> Triple(NeutralWhite, NeutralBaseGrey,NeutralBaseGrey )
+            ButtonState.Pressed -> Triple(PrimaryLight, PrimaryDark, PrimaryDark)
         }
         ButtonType.Transparent -> when(buttonState) {
-            ButtonState.Normal -> Triple(NeutralWhite, PrimaryBase, PrimaryBase)
-            ButtonState.Disabled -> Triple(NeutralWhite, PrimaryLight, PrimaryLight)
-            ButtonState.Pressed -> Triple(PrimaryLight, PrimaryBase, PrimaryBase)
+            ButtonState.Normal -> Triple(Color.Transparent, PrimaryBase, Color.Transparent)
+            ButtonState.Disabled -> Triple(Color.Transparent, NeutralBaseGrey, Color.Transparent)
+            ButtonState.Pressed -> Triple(PrimaryLight, PrimaryBase, Color.Transparent)
         }
     }
 
     val (width, height, textStyle) = when (size) {
-        ButtonSize.Block -> Triple(328.dp, 54.dp, Typography.labelMedium)
-        ButtonSize.Large -> Triple(170.dp, 54.dp, Typography.labelMedium)
-        ButtonSize.Small -> Triple(154.dp, 38.dp, Typography.labelMedium)
+        ButtonSize.Block -> Triple(328.dp, 54.dp, AppTypography.textBaseMedium)
+        ButtonSize.Large -> Triple(170.dp, 54.dp, AppTypography.textBaseMedium)
+        ButtonSize.Small -> Triple(154.dp, 38.dp, AppTypography.textBaseMedium)
     }
 
     Button(
@@ -108,8 +107,6 @@ fun CustomButton(
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
-            } else {
-                Spacer(modifier = Modifier.width(24.dp))
             }
             Text(
                 text = text,
@@ -123,8 +120,6 @@ fun CustomButton(
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
-            } else {
-                Spacer(modifier = Modifier.width(24.dp))
             }
         }
     }
