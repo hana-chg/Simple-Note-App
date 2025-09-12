@@ -23,7 +23,11 @@ import com.sharif.simplenote.ui.components.ButtonSize
 import com.sharif.simplenote.ui.components.ButtonType
 import com.sharif.simplenote.ui.components.CustomButton
 import com.sharif.simplenote.ui.components.InputField
+import com.sharif.simplenote.ui.components.NavBar
+import com.sharif.simplenote.ui.components.RightActionType
 import com.sharif.simplenote.ui.components.ScreenTitle
+import com.sharif.simplenote.ui.components.SetupStatusBar
+import com.sharif.simplenote.ui.components.WithStatusBarPadding
 import com.sharif.simplenote.ui.theme.AppTypography
 import com.sharif.simplenote.ui.theme.NeutralWhite
 import com.sharif.simplenote.ui.theme.PrimaryBase
@@ -38,133 +42,144 @@ fun RegisterScreen(navController: NavController? = null) {
     var retypePassword by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NeutralWhite)
-            .padding(horizontal = 24.dp)
-            .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        // Content
-        Column {
-            Spacer(modifier = Modifier.height(10.dp))
+    SetupStatusBar(color = NeutralWhite, darkIcons = true)
 
-            //Screen Title
-            ScreenTitle(
-                title = stringResource(R.string.register_title),
-                description = stringResource(R.string.register_description)
+
+    WithStatusBarPadding {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(NeutralWhite)
+                .padding(horizontal = 24.dp)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            // Nav Bar
+            NavBar (
+                backButtonText = stringResource(R.string.register_navbar_back),
+                showTitle = false,
+                onBackClick = {}
             )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Input Fields And Actions
+            // Content
             Column {
-                // Input Fields
+                Spacer(modifier = Modifier.height(10.dp))
+
+                //Screen Title
+                ScreenTitle(
+                    title = stringResource(R.string.register_title),
+                    description = stringResource(R.string.register_description)
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Input Fields And Actions
                 Column {
-                    // First Name field
-                    InputField(
-                        label = true,
-                        labelText = stringResource(R.string.register_firstname_label),
-                        value = firstName,
-                        onValueChange = { firstName = it },
-                        placeholderText = stringResource(R.string.register_firstname_placeholder)
-                    )
+                    // Input Fields
+                    Column {
+                        // First Name field
+                        InputField(
+                            label = true,
+                            labelText = stringResource(R.string.register_firstname_label),
+                            value = firstName,
+                            onValueChange = { firstName = it },
+                            placeholderText = stringResource(R.string.register_firstname_placeholder)
+                        )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                    // Last Name field
-                    InputField(
-                        label = true,
-                        labelText = stringResource(R.string.register_lastname_label),
-                        value = lastName,
-                        onValueChange = { lastName = it },
-                        placeholderText = stringResource(R.string.register_lastname_placeholder)
-                    )
+                        // Last Name field
+                        InputField(
+                            label = true,
+                            labelText = stringResource(R.string.register_lastname_label),
+                            value = lastName,
+                            onValueChange = { lastName = it },
+                            placeholderText = stringResource(R.string.register_lastname_placeholder)
+                        )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                    // Username field
-                    InputField(
-                        label = true,
-                        labelText = stringResource(R.string.register_username_label),
-                        value = username,
-                        onValueChange = { username = it },
-                        placeholderText = stringResource(R.string.register_username_placeholder),
-                    )
+                        // Username field
+                        InputField(
+                            label = true,
+                            labelText = stringResource(R.string.register_username_label),
+                            value = username,
+                            onValueChange = { username = it },
+                            placeholderText = stringResource(R.string.register_username_placeholder),
+                        )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                    // Email field
-                    InputField(
-                        label = true,
-                        labelText = stringResource(R.string.register_email_label),
-                        value = email,
-                        onValueChange = { email = it },
-                        placeholderText = stringResource(R.string.register_email_placeholder)
-                    )
+                        // Email field
+                        InputField(
+                            label = true,
+                            labelText = stringResource(R.string.register_email_label),
+                            value = email,
+                            onValueChange = { email = it },
+                            placeholderText = stringResource(R.string.register_email_placeholder)
+                        )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                    // Password field
-                    InputField(
-                        labelText = stringResource(R.string.register_password_label),
-                        label = true,
-                        value = password,
-                        onValueChange = { password = it },
-                        placeholderText = stringResource(R.string.register_password_placeholder),
-                        isPassword = true
-                    )
+                        // Password field
+                        InputField(
+                            labelText = stringResource(R.string.register_password_label),
+                            label = true,
+                            value = password,
+                            onValueChange = { password = it },
+                            placeholderText = stringResource(R.string.register_password_placeholder),
+                            isPassword = true
+                        )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                    // Retype Password field
-                    InputField(
-                        labelText = stringResource(R.string.register_password_retype_label),
-                        label = true,
-                        value = retypePassword,
-                        onValueChange = { retypePassword = it },
-                        placeholderText = stringResource(R.string.register_password_placeholder),
-                        isPassword = true
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                // Actions
-                Column {
-                    // Register button
-                    CustomButton(
-                        text = stringResource(R.string.register_button_register),
-                        type = ButtonType.Primary,
-                        onClick = {
-                            // Validate and register
-                        },
-                        enabled = true,
-                        icon = true,
-                        iconPosition = "right",
-                        size = ButtonSize.Block
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Already have an account text
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.register_button_login),
-                            style = AppTypography.textBaseMedium,
-                            color = PrimaryBase,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.clickable {
-                                //navController?.popBackStack()
-                            }
+                        // Retype Password field
+                        InputField(
+                            labelText = stringResource(R.string.register_password_retype_label),
+                            label = true,
+                            value = retypePassword,
+                            onValueChange = { retypePassword = it },
+                            placeholderText = stringResource(R.string.register_password_placeholder),
+                            isPassword = true
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    // Actions
+                    Column {
+                        // Register button
+                        CustomButton(
+                            text = stringResource(R.string.register_button_register),
+                            type = ButtonType.Primary,
+                            onClick = {
+                                // Validate and register
+                            },
+                            enabled = true,
+                            icon = true,
+                            iconPosition = "right",
+                            size = ButtonSize.Block
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Already have an account text
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.register_button_login),
+                                style = AppTypography.textBaseMedium,
+                                color = PrimaryBase,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.clickable {
+                                    navController?.popBackStack()
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(32.dp))
+                    }
                 }
             }
         }

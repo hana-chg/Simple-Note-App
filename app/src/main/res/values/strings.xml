@@ -32,6 +32,7 @@
     <string name="register_password_placeholder">********</string>
     <string name="register_button_register">Register</string>
     <string name="register_button_login">Already have an account? Login here</string>
+    <string name="register_navbar_back">Back to Login</string>
 
 
     <!-- Note Details & Management -->

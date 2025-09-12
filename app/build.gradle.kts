@@ -86,8 +86,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Hilt for Dependency Injection
-    implementation("com.google.dagger:hilt-android:2.50")
-    ksp("com.google.dagger:hilt-compiler:2.50")
+    implementation("com.google.dagger:hilt-android:2.54")
+    ksp("com.google.dagger:hilt-compiler:2.54")
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
 
     // Paging
@@ -100,7 +100,7 @@ dependencies {
     //font
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.1")
 
-    //coil
-//    implementation("io.coil-kt.coil3:coil-svg:3.3.0")
-//    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+    // status bar
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
 }

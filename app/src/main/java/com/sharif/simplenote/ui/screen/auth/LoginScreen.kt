@@ -41,127 +41,112 @@ fun LoginScreen(navController: NavController? = null) {
             .fillMaxSize()
             .background(NeutralWhite)
             .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        // Header section
-        Column(
-            modifier = Modifier
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            Spacer(modifier = Modifier.height(40.dp))
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
 
+        ) {
+        // Content
+        Column {
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Screen Title
             ScreenTitle(
                 title = stringResource(R.string.login_title),
                 description = stringResource(R.string.login_description)
             )
 
-            Spacer(modifier = Modifier.height(50.dp))
-        }
+            Spacer(modifier = Modifier.height(32.dp))
 
-        // Input Fields and Actions
-        Column(
-            modifier = Modifier
-                .weight(2f)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Top
-        ) {
-            // Input Fields
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Top
-            ) {
-                // Email field
-                InputField(
-                    label = true,
-                    labelText = stringResource(R.string.login_email_label),
-                    value = email,
-                    onValueChange = { email = it },
-                    placeholderText = stringResource(R.string.login_email_placeholder),
-                    state = if (emailError) InputFieldState.Error else InputFieldState.Default
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Password field
-                InputField(
-                    labelText = stringResource(R.string.login_password_label),
-                    label = true,
-                    value = password,
-                    onValueChange = { password = it },
-                    placeholderText = stringResource(R.string.login_password_placeholder),
-                    isPassword = true,
-                    state = if (passwordError) InputFieldState.Error else InputFieldState.Default
-                )
-            }
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-
-            // Actions
-            Column(
-                modifier = Modifier
-                    .weight(2f),
-                verticalArrangement = Arrangement.Top
-            ) {
-                // Login button
-                CustomButton(
-                    text = stringResource(R.string.login_button_login),
-                    type = ButtonType.Primary,
-                    onClick = {
-                        // Validate and login
-                    },
-                    enabled = true,
-                    icon = true,
-                    iconPosition = "right",
-                    size = ButtonSize.Block
-                )
-
-                // Or with lines on both sides
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Left line
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(1.dp),
-                        color = NeutralLightGrey
+            // Input Fields and Actions
+            Column {
+                // Input Fields
+                Column {
+                    // Email field
+                    InputField(
+                        label = true,
+                        labelText = stringResource(R.string.login_email_label),
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholderText = stringResource(R.string.login_email_placeholder),
+                        state = if (emailError) InputFieldState.Error else InputFieldState.Default
                     )
 
-                    // Or text
-                    Text(
-                        text = "Or",
-                        style = AppTypography.text2xsMedium,
-                        color = NeutralDarkGrey,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
+                    Spacer(modifier = Modifier.height(32.dp))
 
-                    // Right line
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(1.dp),
-                        color = NeutralLightGrey
+                    // Password field
+                    InputField(
+                        labelText = stringResource(R.string.login_password_label),
+                        label = true,
+                        value = password,
+                        onValueChange = { password = it },
+                        placeholderText = stringResource(R.string.login_password_placeholder),
+                        isPassword = true,
+                        state = if (passwordError) InputFieldState.Error else InputFieldState.Default
                     )
                 }
 
-                //Register Button
-                CustomButton(
-                    text = stringResource(R.string.login_button_register),
-                    type = ButtonType.Transparent,
-                    onClick = {
-                        //navigate to register
-                    },
-                    enabled = true,
-                    size = ButtonSize.Block,
-                    modifier = Modifier.padding(bottom = 32.dp)
-                )
+                Spacer(modifier = Modifier.height(40.dp))
+
+
+                // Actions
+                Column {
+                    // Login button
+                    CustomButton(
+                        text = stringResource(R.string.login_button_login),
+                        type = ButtonType.Primary,
+                        onClick = {
+                            // Validate and login
+                        },
+                        enabled = true,
+                        icon = true,
+                        iconPosition = "right",
+                        size = ButtonSize.Block
+                    )
+
+                    // Or with lines on both sides
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Left line
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(1.dp),
+                            color = NeutralLightGrey
+                        )
+
+                        // Or text
+                        Text(
+                            text = "Or",
+                            style = AppTypography.text2xsMedium,
+                            color = NeutralDarkGrey,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+
+                        // Right line
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(1.dp),
+                            color = NeutralLightGrey
+                        )
+                    }
+
+                    //Register Button
+                    CustomButton(
+                        text = stringResource(R.string.login_button_register),
+                        type = ButtonType.Transparent,
+                        onClick = {
+                            navController?.navigate("register")
+                        },
+                        enabled = true,
+                        size = ButtonSize.Block,
+                        modifier = Modifier.padding(bottom = 32.dp)
+                    )
+                }
             }
         }
     }
