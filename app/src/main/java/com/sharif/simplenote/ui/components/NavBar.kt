@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,9 +50,9 @@ fun NavBar(
 
     Box(
         modifier = modifier
-            .width(360.dp)
+            .fillMaxWidth()
             .height(64.dp)
-            .background(NeutralWhite)
+            .background(Color.Transparent)
             .then(
                 if (borderBottom) {
                     Modifier.drawBehind {

@@ -7,6 +7,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,24 +17,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.sharif.simplenote.R
 import com.sharif.simplenote.ui.components.ButtonSize
 import com.sharif.simplenote.ui.components.ButtonType
 import com.sharif.simplenote.ui.components.CustomButton
 import com.sharif.simplenote.ui.components.InputField
 import com.sharif.simplenote.ui.components.NavBar
-import com.sharif.simplenote.ui.components.RightActionType
 import com.sharif.simplenote.ui.components.ScreenTitle
 import com.sharif.simplenote.ui.components.StatusBar
+import com.sharif.simplenote.ui.navigation.NavItem
 import com.sharif.simplenote.ui.theme.AppTypography
 import com.sharif.simplenote.ui.theme.NeutralWhite
 import com.sharif.simplenote.ui.theme.PrimaryBase
+import com.sharif.simplenote.viewModel.AuthViewModel
 
 @Composable
-fun RegisterScreen(navController: NavController? = null) {
+fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
@@ -40,6 +42,7 @@ fun RegisterScreen(navController: NavController? = null) {
     var password by remember { mutableStateOf("") }
     var retypePassword by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
+    val registerState by viewModel.registerState.collectAsState()
 
 
 
@@ -59,7 +62,9 @@ fun RegisterScreen(navController: NavController? = null) {
         NavBar(
             backButtonText = stringResource(R.string.register_navbar_back),
             showTitle = false,
-            onBackClick = {}
+            onBackClick = {
+                navController.navigate(NavItem.Login.route)
+            }
         )
         // Content
         Column {
@@ -153,7 +158,7 @@ fun RegisterScreen(navController: NavController? = null) {
                         text = stringResource(R.string.register_button_register),
                         type = ButtonType.Primary,
                         onClick = {
-                            // Validate and register
+                            viewModel.register(username, email, password, firstName, lastName)
                         },
                         enabled = true,
                         icon = true,
@@ -174,7 +179,7 @@ fun RegisterScreen(navController: NavController? = null) {
                             color = PrimaryBase,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.clickable {
-                                navController?.popBackStack()
+                                navController.navigate(NavItem.Login.route)
                             }
                         )
                     }
@@ -184,11 +189,12 @@ fun RegisterScreen(navController: NavController? = null) {
             }
         }
     }
-}
 
-
-@Preview(showBackground = true)
-@Composable
-fun RegisterPreview() {
-    RegisterScreen()
+    LaunchedEffect(registerState.isSuccess) {
+        if (registerState.isSuccess) {
+            navController.navigate(NavItem.Home.route) {
+                popUpTo(NavItem.Register.route) { inclusive = true }
+            }
+        }
+    }
 }

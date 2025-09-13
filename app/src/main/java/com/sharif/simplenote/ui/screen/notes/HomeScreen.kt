@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,11 +30,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sharif.simplenote.R
-import com.sharif.simplenote.data.models.Note
 import com.sharif.simplenote.ui.components.IconMenuType
 import com.sharif.simplenote.ui.components.LinkSize
 import com.sharif.simplenote.ui.components.LinkType
@@ -46,27 +46,30 @@ import com.sharif.simplenote.ui.theme.AppTypography
 import com.sharif.simplenote.ui.theme.NeutralBlack
 import com.sharif.simplenote.ui.theme.NeutralDarkGrey
 import com.sharif.simplenote.ui.theme.PrimaryBackground
+import com.sharif.simplenote.viewModel.NotesViewModel
 
 
 @Composable
 fun HomeScreen(
-    navController: NavController? = null
+    navController: NavHostController, viewModel: NotesViewModel
 ) {
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val notes = viewModel.notesFlow.collectAsLazyPagingItems()
     var selectedTab by remember { mutableStateOf(IconMenuType.Home) }
-    var searchQuery by remember { mutableStateOf("") }
-
-    val notes = emptyList<Note>()
 
 
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(PrimaryBackground)) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PrimaryBackground)
+    ) {
 
         StatusBar()
 
         // Main content
-        if (notes.isEmpty()) {
+        if (notes.itemCount == 0) {
             EmptyState(
                 modifier = Modifier
                     .fillMaxSize()
@@ -85,7 +88,7 @@ fun HomeScreen(
                 SearchBar(
                     icon = ImageVector.vectorResource(R.drawable.search_outlined),
                     searchQuery = searchQuery,
-                    onSearchQueryChange = { searchQuery = it },
+                    onSearchQueryChange = { viewModel.updateSearchQuery(it) },
                     onIconClick = {},
                     onSearch = { query -> }
                 )
@@ -99,6 +102,7 @@ fun HomeScreen(
                     linkType = LinkType.Underline
                 )
 
+
                 LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxSize()
@@ -108,37 +112,40 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(notes.size) { index ->
+                    items(notes.itemCount) { index ->
                         val note = notes[index]
-                        NoteCard(
-                            title = note.title,
-                            content = note.description,
-                            onClick = {},
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        if (note != null) {
+                            NoteCard(
+                                title = note.title,
+                                content = note.description,
+                                onClick = { navController.navigate("note/edit/${note.id}") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }
-        }
 
-        // TabBar positioned absolutely at the bottom
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(124.dp)
-                .background(Color.Transparent)
-        ) {
-            TabBar(
-                selectedTab = selectedTab,
-                onTabSelected = { tab -> selectedTab = tab },
-                onCenterButtonClick = {
-                    navController?.navigate("create_note")
-                }
-            )
         }
     }
+
+    // TabBar positioned absolutely at the bottom
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+    ) {
+        TabBar(
+            modifier = Modifier.align(Alignment.BottomEnd),  // Move align inside the Box content
+            selectedTab = selectedTab,
+            onTabSelected = { tab -> selectedTab = tab },
+            onCenterButtonClick = {
+                navController.navigate("note_edit/0")
+            }
+        )
+    }
 }
+
 
 
 @Composable
@@ -183,9 +190,3 @@ fun EmptyState(modifier: Modifier = Modifier) {
     }
 }
 
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}

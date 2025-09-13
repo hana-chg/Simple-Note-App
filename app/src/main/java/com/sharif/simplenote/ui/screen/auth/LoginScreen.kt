@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,9 +13,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.sharif.simplenote.R
 import com.sharif.simplenote.ui.components.ButtonSize
 import com.sharif.simplenote.ui.components.ButtonType
@@ -22,20 +23,20 @@ import com.sharif.simplenote.ui.components.InputField
 import com.sharif.simplenote.ui.components.InputFieldState
 import com.sharif.simplenote.ui.components.ScreenTitle
 import com.sharif.simplenote.ui.components.StatusBar
+import com.sharif.simplenote.ui.navigation.NavItem
 import com.sharif.simplenote.ui.theme.AppTypography
-import com.sharif.simplenote.ui.theme.NeutralBaseGrey
 import com.sharif.simplenote.ui.theme.NeutralDarkGrey
 import com.sharif.simplenote.ui.theme.NeutralLightGrey
 import com.sharif.simplenote.ui.theme.NeutralWhite
-import com.sharif.simplenote.ui.theme.PrimaryBase
-import com.sharif.simplenote.ui.theme.interFamily
+import com.sharif.simplenote.viewModel.AuthViewModel
 
 @Composable
-fun LoginScreen(navController: NavController? = null) {
+fun LoginScreen(navController: NavHostController, viewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var emailError by remember { mutableStateOf(false) }
-    var passwordError by remember { mutableStateOf(false) }
+    val emailError by remember { mutableStateOf(false) }
+    val passwordError by remember { mutableStateOf(false) }
+    val loginState by viewModel.loginState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -97,7 +98,7 @@ fun LoginScreen(navController: NavController? = null) {
                         text = stringResource(R.string.login_button_login),
                         type = ButtonType.Primary,
                         onClick = {
-                            // Validate and login
+                             viewModel.login(email, password)
                         },
                         enabled = true,
                         icon = true,
@@ -142,7 +143,7 @@ fun LoginScreen(navController: NavController? = null) {
                         text = stringResource(R.string.login_button_register),
                         type = ButtonType.Transparent,
                         onClick = {
-                            navController?.navigate("register")
+                            navController.navigate(NavItem.Register.route)
                         },
                         enabled = true,
                         size = ButtonSize.Block,
@@ -152,10 +153,12 @@ fun LoginScreen(navController: NavController? = null) {
             }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun LoginPreview() {
-    LoginScreen()
+    LaunchedEffect (loginState.isSuccess) {
+        if (loginState.isSuccess) {
+            navController.navigate(NavItem.Home.route) {
+                popUpTo(NavItem.Login.route) { inclusive = true }
+            }
+        }
+    }
 }
