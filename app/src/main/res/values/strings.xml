@@ -37,6 +37,7 @@
     <!-- Home !-->
     <string name="home_empty_title">Start Your Journey</string>
     <string name="home_empty_description">Every big step start with small step.Notes your first idea and start your journey!</string>
+    <string name="notes">Notes</string>
 
 
 
@@ -45,6 +46,8 @@
     <string name="back">back</string>
     <string name="search">Search</string>
     <string name="clear_search">Clear search</string>
+
+    
     <!-- Note Details & Management -->
     <!-- Profile -->
 </resources>

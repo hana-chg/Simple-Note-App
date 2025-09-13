@@ -34,7 +34,10 @@ import androidx.navigation.NavController
 import com.sharif.simplenote.R
 import com.sharif.simplenote.data.models.Note
 import com.sharif.simplenote.ui.components.IconMenuType
+import com.sharif.simplenote.ui.components.LinkSize
+import com.sharif.simplenote.ui.components.LinkType
 import com.sharif.simplenote.ui.components.SearchBar
+import com.sharif.simplenote.ui.components.SectionTitle
 import com.sharif.simplenote.ui.components.TabBar
 import com.sharif.simplenote.ui.theme.AppTypography
 import com.sharif.simplenote.ui.theme.NeutralBlack
@@ -80,7 +83,8 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 16.dp),
+                    horizontalAlignment =Alignment.CenterHorizontally
                 ) {
                     // Search bar
                     Spacer(modifier = Modifier.height(16.dp))
@@ -99,11 +103,19 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
+                    SectionTitle(
+                        label = stringResource(R.string.notes),
+                        onLinkClick = { },
+                        linkSize = LinkSize.Small,
+                        linkType = LinkType.Underline
+                    )
+
                     // Notes list
                     LazyColumn(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+
 
                         items(notes) { note ->
                             //NoteCard(note = note)
@@ -115,6 +127,7 @@ fun HomeScreen(
                     }
                 }
             }
+
         }
     }
 }
