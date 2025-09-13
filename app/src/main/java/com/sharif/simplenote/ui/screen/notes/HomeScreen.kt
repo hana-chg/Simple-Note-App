@@ -40,6 +40,7 @@ import com.sharif.simplenote.ui.components.LinkType
 import com.sharif.simplenote.ui.components.NoteCard
 import com.sharif.simplenote.ui.components.SearchBar
 import com.sharif.simplenote.ui.components.SectionTitle
+import com.sharif.simplenote.ui.components.StatusBar
 import com.sharif.simplenote.ui.components.TabBar
 import com.sharif.simplenote.ui.theme.AppTypography
 import com.sharif.simplenote.ui.theme.NeutralBlack
@@ -61,6 +62,9 @@ fun HomeScreen(
     Box(modifier = Modifier
         .fillMaxSize()
         .background(PrimaryBackground)) {
+
+        StatusBar()
+
         // Main content
         if (notes.isEmpty()) {
             EmptyState(

@@ -21,6 +21,7 @@ import com.sharif.simplenote.ui.components.CustomButton
 import com.sharif.simplenote.ui.components.InputField
 import com.sharif.simplenote.ui.components.InputFieldState
 import com.sharif.simplenote.ui.components.ScreenTitle
+import com.sharif.simplenote.ui.components.StatusBar
 import com.sharif.simplenote.ui.theme.AppTypography
 import com.sharif.simplenote.ui.theme.NeutralBaseGrey
 import com.sharif.simplenote.ui.theme.NeutralDarkGrey
@@ -45,6 +46,7 @@ fun LoginScreen(navController: NavController? = null) {
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
+        StatusBar()
         // Content
         Column {
             Spacer(modifier = Modifier.height(32.dp))

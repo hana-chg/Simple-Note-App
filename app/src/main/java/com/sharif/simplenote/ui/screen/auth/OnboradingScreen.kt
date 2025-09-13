@@ -19,6 +19,7 @@ import com.sharif.simplenote.R
 import com.sharif.simplenote.ui.components.ButtonSize
 import com.sharif.simplenote.ui.components.ButtonType
 import com.sharif.simplenote.ui.components.CustomButton
+import com.sharif.simplenote.ui.components.StatusBar
 import com.sharif.simplenote.ui.theme.NeutralWhite
 import com.sharif.simplenote.ui.theme.PrimaryBase
 import com.sharif.simplenote.ui.theme.interFamily
@@ -33,6 +34,10 @@ fun OnboardingScreen(navController: NavController? = null) {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        
+        // Status Bar
+        StatusBar()
+
         Spacer(modifier = Modifier.weight(0.5f))
 
         // Main content column
