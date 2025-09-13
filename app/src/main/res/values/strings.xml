@@ -34,7 +34,17 @@
     <string name="register_button_login">Already have an account? Login here</string>
     <string name="register_navbar_back">Back to Login</string>
 
+    <!-- Home !-->
+    <string name="home_empty_title">Start Your Journey</string>
+    <string name="home_empty_description">Every big step start with small step.Notes your first idea and start your journey!</string>
 
+
+
+    <!-- Search !-->
+    <string name="search_placeholder">Search...</string>
+    <string name="back">back</string>
+    <string name="search">Search</string>
+    <string name="clear_search">Clear search</string>
     <!-- Note Details & Management -->
     <!-- Profile -->
 </resources>
