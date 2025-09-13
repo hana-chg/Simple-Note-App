@@ -68,7 +68,7 @@ fun OnboardingScreen(navController: NavController? = null) {
                 .padding(bottom = 48.dp)
         ) {
             CustomButton(
-                text = "Get Started",
+                text = stringResource(R.string.onboarding_button),
                 type = ButtonType.Secondary,
                 onClick = {
                     // Navigate to next screen

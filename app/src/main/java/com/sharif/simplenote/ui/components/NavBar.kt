@@ -3,6 +3,7 @@ package com.sharif.simplenote.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
@@ -82,7 +83,7 @@ fun NavBar(
                 type = LinkType.NoUnderline,
                 size = LinkSize.Large,
                 icon = true,
-                iconImage = Icons.Default.KeyboardArrowDown,
+                iconImage = Icons.Default.ArrowBack,
                 iconPosition = LinkIconPosition.Left,
                 state = LinkState.Normal,
             )

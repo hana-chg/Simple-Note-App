@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,10 +35,11 @@ import com.sharif.simplenote.ui.theme.NeutralLightGrey
 fun SearchBar(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onBackClick: () -> Unit,
+    onIconClick: () -> Unit,
     modifier: Modifier = Modifier,
     placeholderText: String = stringResource(R.string.search_placeholder),
-    onSearch: (String) -> Unit = {}
+    onSearch: (String) -> Unit = {},
+    icon: ImageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
 ) {
     Row(
         modifier = modifier
@@ -49,11 +51,11 @@ fun SearchBar(
     ) {
         // Back icon
         IconButton(
-            onClick = onBackClick,
+            onClick = onIconClick,
             modifier = Modifier.size(40.dp)
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                imageVector = icon,
                 contentDescription = stringResource(R.string.back),
             )
         }
@@ -117,7 +119,7 @@ fun SearchPreview() {
     SearchBar(
         searchQuery = "",
         onSearchQueryChange = {},
-        onBackClick = {},
+        onIconClick = {},
         modifier = Modifier,
         onSearch = { TODO() }
     )
