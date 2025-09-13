@@ -5,15 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +37,7 @@ import com.sharif.simplenote.data.models.Note
 import com.sharif.simplenote.ui.components.IconMenuType
 import com.sharif.simplenote.ui.components.LinkSize
 import com.sharif.simplenote.ui.components.LinkType
+import com.sharif.simplenote.ui.components.NoteCard
 import com.sharif.simplenote.ui.components.SearchBar
 import com.sharif.simplenote.ui.components.SectionTitle
 import com.sharif.simplenote.ui.components.TabBar
@@ -52,91 +54,93 @@ fun HomeScreen(
     var selectedTab by remember { mutableStateOf(IconMenuType.Home) }
     var searchQuery by remember { mutableStateOf("") }
 
-    val notes = remember { emptyList<Note>() }
+    val notes = emptyList<Note>()
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(PrimaryBackground),
-        bottomBar = {
+
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(PrimaryBackground)) {
+        // Main content
+        if (notes.isEmpty()) {
+            EmptyState(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 84.dp) // Padding to avoid TabBar overlap
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 84.dp), // Padding to avoid TabBar overlap
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                SearchBar(
+                    icon = ImageVector.vectorResource(R.drawable.search_outlined),
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { searchQuery = it },
+                    onIconClick = {},
+                    onSearch = { query -> }
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SectionTitle(
+                    label = stringResource(R.string.notes),
+                    onLinkClick = { },
+                    linkSize = LinkSize.Small,
+                    linkType = LinkType.Underline
+                )
+
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(notes.size) { index ->
+                        val note = notes[index]
+                        NoteCard(
+                            title = note.title,
+                            content = note.description,
+                            onClick = {},
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+        }
+
+        // TabBar positioned absolutely at the bottom
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(124.dp)
+                .background(Color.Transparent)
+        ) {
             TabBar(
                 selectedTab = selectedTab,
                 onTabSelected = { tab -> selectedTab = tab },
                 onCenterButtonClick = {
-                    // Navigate to create note screen
                     navController?.navigate("create_note")
                 }
             )
-        },
-        containerColor = Color.Transparent
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            if (notes.isEmpty()) {
-                // Empty state
-                EmptyState()
-            } else {
-                // Normal state
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    horizontalAlignment =Alignment.CenterHorizontally
-                ) {
-                    // Search bar
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    SearchBar(
-                        icon = ImageVector.vectorResource(R.drawable.search_outlined),
-                        searchQuery = searchQuery,
-                        onSearchQueryChange = { searchQuery = it },
-                        onIconClick = {
-
-                        },
-                        onSearch = { query ->
-                            // Handle search action
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    SectionTitle(
-                        label = stringResource(R.string.notes),
-                        onLinkClick = { },
-                        linkSize = LinkSize.Small,
-                        linkType = LinkType.Underline
-                    )
-
-                    // Notes list
-                    LazyColumn(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-
-
-                        items(notes) { note ->
-                            //NoteCard(note = note)
-                        }
-
-                        item {
-                            Spacer(modifier = Modifier.height(80.dp))
-                        }
-                    }
-                }
-            }
-
         }
     }
 }
 
+
 @Composable
-fun EmptyState() {
+fun EmptyState(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -152,8 +156,7 @@ fun EmptyState() {
 
         // Text & Description
         Column(
-            Modifier.width(237.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            Modifier.width(237.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Title
             Text(
