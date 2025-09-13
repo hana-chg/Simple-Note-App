@@ -35,6 +35,7 @@ fun TabBar(
         modifier = modifier
             .fillMaxWidth()
             .height(124.dp)
+            .background(color = Color.Transparent)
     ) {
         // White box for tab items
         Surface(
@@ -42,7 +43,8 @@ fun TabBar(
                 .fillMaxWidth()
                 .height(84.dp)
                 .align(Alignment.BottomCenter),
-            color = NeutralWhite,) {
+            color = NeutralWhite
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -61,6 +63,7 @@ fun TabBar(
                 Box(
                     modifier = Modifier
                         .size(80.dp)
+                        .background(Color.Transparent)
                 )
 
                 // Settings tab on the right
@@ -76,7 +79,7 @@ fun TabBar(
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = (-0).dp)
+                .offset(y = (5).dp)
                 .zIndex(1f) // Ensure the button is above the white box
         ) {
             IconButton(
@@ -93,14 +96,12 @@ fun TabBar(
 }
 
 
-
-
 // Preview
 @Preview
 @Composable
 fun BottomTabBarPreview() {
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.LightGray)

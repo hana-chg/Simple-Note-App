@@ -78,7 +78,7 @@ fun Link(
 
     // Text style based on size
     val textStyle = when (size) {
-        LinkSize.Small -> AppTypography.text2xiMedium
+        LinkSize.Small -> AppTypography.text2xsMedium
         LinkSize.Large -> AppTypography.textBaseMedium
     }
 
