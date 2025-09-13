@@ -75,4 +75,12 @@ class AuthRepository @Inject constructor(
     suspend fun isLoggedIn(): Boolean {
         return getAccessToken() != null
     }
+
+    suspend fun changePassword(oldPassword: String, newPassword: String): ChangePasswordResponse? {
+        return try {
+            apiService.changePassword(ChangePasswordRequest(oldPassword, newPassword))
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

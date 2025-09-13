@@ -4,9 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.sharif.simplenote.data.local.database.NoteDao
-import com.sharif.simplenote.data.models.Note
-import com.sharif.simplenote.data.models.NoteRequest
-import com.sharif.simplenote.data.models.PaginatedNoteList
+import com.sharif.simplenote.data.models.*
 import com.sharif.simplenote.data.remote.ApiService
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -73,6 +71,40 @@ class NoteRepository @Inject constructor(
             true
         } catch (e: Exception) {
             false
+        }
+    }
+
+    suspend fun createBulkNotes(notes: List<BulkNoteRequest>): List<Note>? {
+        return try {
+            val createdNotes = apiService.createBulkNotes(notes)
+            noteDao.insertNotes(createdNotes)
+            createdNotes
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getFilteredNotes(
+        title: String? = null,
+        description: String? = null,
+        updatedGte: String? = null,
+        updatedLte: String? = null,
+        page: Int = 1,
+        pageSize: Int = 20
+    ): PaginatedNoteList? {
+        return try {
+            val response = apiService.getFilteredNotes(
+                title = title,
+                description = description,
+                updatedGte = updatedGte,
+                updatedLte = updatedLte,
+                page = page,
+                pageSize = pageSize
+            )
+            noteDao.insertNotes(response.results)
+            response
+        } catch (e: Exception) {
+            null
         }
     }
 }

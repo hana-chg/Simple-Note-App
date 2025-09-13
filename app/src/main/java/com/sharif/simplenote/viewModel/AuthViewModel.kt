@@ -3,6 +3,8 @@ package com.sharif.simplenote.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sharif.simplenote.data.models.TokenObtainPair
+import com.sharif.simplenote.data.models.UserInfo
+import com.sharif.simplenote.data.models.ChangePasswordResponse
 import com.sharif.simplenote.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +16,8 @@ import javax.inject.Inject
 data class AuthState(
     val isLoading: Boolean = false,
     val token: TokenObtainPair? = null,
+    val user: UserInfo? = null,
+    val changePasswordResponse: ChangePasswordResponse? = null,
     val error: String? = null,
     val isSuccess: Boolean = false
 )
@@ -51,5 +55,39 @@ class AuthViewModel @Inject constructor(
 
     fun isLoggedIn(): Boolean {
         return runBlocking { authRepository.isLoggedIn() }
+    }
+
+    fun getUserInfo() {
+        viewModelScope.launch {
+            _authState.value = AuthState(isLoading = true)
+            try {
+                val user = authRepository.getUserInfo()
+                _authState.value = AuthState(user = user, isSuccess = user != null)
+            } catch (e: Exception) {
+                _authState.value = AuthState(error = e.message)
+            }
+        }
+    }
+
+    fun changePassword(oldPassword: String, newPassword: String) {
+        viewModelScope.launch {
+            _authState.value = AuthState(isLoading = true)
+            try {
+                val response = authRepository.changePassword(oldPassword, newPassword)
+                _authState.value = AuthState(
+                    changePasswordResponse = response,
+                    isSuccess = response != null
+                )
+            } catch (e: Exception) {
+                _authState.value = AuthState(error = e.message)
+            }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            authRepository.logout()
+            _authState.value = AuthState()
+        }
     }
 }

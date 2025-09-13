@@ -6,6 +6,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sharif.simplenote.data.models.Note
 import com.sharif.simplenote.data.models.NoteRequest
+import com.sharif.simplenote.data.models.BulkNoteRequest
+import com.sharif.simplenote.data.models.PaginatedNoteList
 import com.sharif.simplenote.data.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -20,6 +22,20 @@ data class NoteCreateState(
 
 data class NoteDetailState(
     val note: Note? = null,
+    val isSuccess: Boolean = false,
+    val error: String? = null,
+    val isLoading: Boolean = false
+)
+
+data class BulkCreateState(
+    val notes: List<Note>? = null,
+    val isSuccess: Boolean = false,
+    val error: String? = null,
+    val isLoading: Boolean = false
+)
+
+data class FilterState(
+    val notes: PaginatedNoteList? = null,
     val isSuccess: Boolean = false,
     val error: String? = null,
     val isLoading: Boolean = false
@@ -42,6 +58,12 @@ class NotesViewModel @Inject constructor(
 
     private val _noteState = MutableStateFlow(NoteDetailState())
     val noteState: StateFlow<NoteDetailState> = _noteState
+
+    private val _bulkCreateState = MutableStateFlow(BulkCreateState())
+    val bulkCreateState: StateFlow<BulkCreateState> = _bulkCreateState
+
+    private val _filterState = MutableStateFlow(FilterState())
+    val filterState: StateFlow<FilterState> = _filterState
 
 
     fun deleteNote(id: Int) {
@@ -93,5 +115,41 @@ class NotesViewModel @Inject constructor(
         }
     }
 
+    fun createBulkNotes(notes: List<BulkNoteRequest>) {
+        viewModelScope.launch {
+            _bulkCreateState.value = BulkCreateState(isLoading = true)
+            val result = noteRepository.createBulkNotes(notes)
+            _bulkCreateState.value = if (result != null) {
+                BulkCreateState(notes = result, isSuccess = true)
+            } else {
+                BulkCreateState(error = "Failed to create notes")
+            }
+        }
+    }
 
+    fun getFilteredNotes(
+        title: String? = null,
+        description: String? = null,
+        updatedGte: String? = null,
+        updatedLte: String? = null,
+        page: Int = 1,
+        pageSize: Int = 20
+    ) {
+        viewModelScope.launch {
+            _filterState.value = FilterState(isLoading = true)
+            val result = noteRepository.getFilteredNotes(
+                title = title,
+                description = description,
+                updatedGte = updatedGte,
+                updatedLte = updatedLte,
+                page = page,
+                pageSize = pageSize
+            )
+            _filterState.value = if (result != null) {
+                FilterState(notes = result, isSuccess = true)
+            } else {
+                FilterState(error = "Failed to filter notes")
+            }
+        }
+    }
 }

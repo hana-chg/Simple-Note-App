@@ -162,7 +162,9 @@ fun SettingScreen(
 
                 SettingOption(
                     Icons.Outlined.Lock, title = "Change Password",
-                    onClick = {/*TODO*/ }
+                    onClick = {
+                        navController.navigate(NavItem.ChangePassword.route)
+                    }
                 )
 
                 // Divider

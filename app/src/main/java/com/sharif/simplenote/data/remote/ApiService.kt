@@ -7,6 +7,7 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
+    // Authentication endpoints
     @POST("api/auth/register/")
     suspend fun register(@Body request: RegisterRequest): Register
 
@@ -19,6 +20,10 @@ interface ApiService {
     @GET("api/auth/userinfo/")
     suspend fun getUserInfo(): UserInfo
 
+    @POST("api/auth/change-password/")
+    suspend fun changePassword(@Body request: ChangePasswordRequest): ChangePasswordResponse
+
+    // Notes endpoints
     @GET("api/notes/")
     suspend fun getNotes(
         @Query("page") page: Int = 1,
@@ -27,8 +32,21 @@ interface ApiService {
         @Query("description") description: String? = null
     ): PaginatedNoteList
 
+    @GET("api/notes/filter")
+    suspend fun getFilteredNotes(
+        @Query("title") title: String? = null,
+        @Query("description") description: String? = null,
+        @Query("updated__gte") updatedGte: String? = null,
+        @Query("updated__lte") updatedLte: String? = null,
+        @Query("page") page: Int = 1,
+        @Query("page_size") pageSize: Int = 20
+    ): PaginatedNoteList
+
     @POST("api/notes/")
     suspend fun createNote(@Body request: NoteRequest): Note
+
+    @POST("api/notes/bulk")
+    suspend fun createBulkNotes(@Body requests: List<BulkNoteRequest>): List<Note>
 
     @GET("api/notes/{id}/")
     suspend fun getNote(@Path("id") id: Int): Note

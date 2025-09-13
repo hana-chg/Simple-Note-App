@@ -4,13 +4,20 @@
 
 ## ویژگی‌های اصلی
 
-- احراز هویت امن با JWT Token
-- ایجاد، ویرایش و حذف یادداشت‌ها
-- جستجو در یادداشت‌ها
-- ذخیره محلی با Room Database
-- همگام‌سازی با سرور
+- احراز هویت امن با JWT Token و تمدید خودکار
+- ثبت‌نام و ورود کاربران
+- مشاهده لیست یادداشت‌ها با pagination
+- جستجو پیشرفته در یادداشت‌ها
+- مشاهده جزئیات یادداشت
+- مدیریت کامل یادداشت‌ها (اضافه کردن، ویرایش، حذف)
+- عملیات bulk برای ایجاد چندین یادداشت همزمان
+- فیلتر پیشرفته با تاریخ و محتوا
+- مشاهده پروفایل کاربر
+- تغییر رمز عبور
+- خروج از حساب کاربری
+- مکانیزم تجدید توکن احراز هویت
+- کار offline-first با پایگاه داده محلی
 - رابط کاربری مدرن با Material Design 3
-- پشتیبانی از صفحه‌بندی کارآمد
 
 ## تکنولوژی‌های استفاده شده
 
@@ -192,6 +199,64 @@ data class PaginatedNoteList(
 - برای پیاده‌سازی pagination استفاده می‌شود
 - عملکرد اپلیکیشن را بهبود می‌دهد (فقط بخشی از داده‌ها لود می‌شود)
 
+**`ChangePasswordRequest.kt`** - درخواست تغییر رمز عبور:
+```kotlin
+data class ChangePasswordRequest(
+    val old_password: String,
+    val new_password: String
+)
+
+data class ChangePasswordResponse(
+    val detail: String
+)
+```
+
+**توضیح کامل:**
+- `ChangePasswordRequest` برای ارسال درخواست تغییر رمز عبور
+- `old_password: String` رمز عبور فعلی
+- `new_password: String` رمز عبور جدید
+- `ChangePasswordResponse` پاسخ سرور بعد از تغییر رمز عبور
+- `detail: String` پیام پاسخ از سرور
+
+**`BulkNoteRequest.kt`** - درخواست ایجاد چندین یادداشت:
+```kotlin
+data class BulkNoteRequest(
+    val title: String,
+    val description: String
+)
+
+data class BulkNoteResponse(
+    val notes: List<Note>
+)
+```
+
+**توضیح کامل:**
+- `BulkNoteRequest` برای ایجاد چندین یادداشت در یک درخواست
+- `title: String` عنوان یادداشت
+- `description: String` محتوای یادداشت
+- `BulkNoteResponse` لیست یادداشت‌های ایجاد شده
+- برای بهبود عملکرد هنگام ایجاد چندین یادداشت
+
+**`NoteFilterRequest.kt`** - درخواست فیلتر پیشرفته:
+```kotlin
+data class NoteFilterRequest(
+    val title: String? = null,
+    val description: String? = null,
+    val updated__gte: String? = null, // Updated greater than or equal (ISO date)
+    val updated__lte: String? = null, // Updated less than or equal (ISO date)
+    val page: Int = 1,
+    val page_size: Int = 20
+)
+```
+
+**توضیح کامل:**
+- `title: String?` فیلتر بر اساس عنوان
+- `description: String?` فیلتر بر اساس محتوا
+- `updated__gte: String?` یادداشت‌های به‌روزرسانی شده بعد از تاریخ مشخص
+- `updated__lte: String?` یادداشت‌های به‌روزرسانی شده قبل از تاریخ مشخص
+- `page: Int` شماره صفحه
+- `page_size: Int` تعداد آیتم در هر صفحه
+
 #### Database (`data/local/`)
 
 **`AppDatabase.kt`** - پایگاه داده Room:
@@ -271,14 +336,23 @@ interface ApiService {
 
 **توضیح کامل:**
 - این interface تمام API endpoints را تعریف می‌کند
-- `@POST("api/auth/register/")` ثبت‌نام کاربر جدید
-- `@POST("api/auth/token/")` دریافت JWT token برای ورود
-- `@GET("api/notes/")` دریافت لیست یادداشت‌ها با pagination
+- **Authentication endpoints:**
+  - `@POST("api/auth/register/")` ثبت‌نام کاربر جدید
+  - `@POST("api/auth/token/")` دریافت JWT token برای ورود
+  - `@POST("api/auth/token/refresh/")` تمدید JWT token
+  - `@GET("api/auth/userinfo/")` دریافت اطلاعات کاربر
+  - `@POST("api/auth/change-password/")` تغییر رمز عبور
+- **Notes endpoints:**
+  - `@GET("api/notes/")` دریافت لیست یادداشت‌ها با pagination
+  - `@GET("api/notes/filter")` فیلتر پیشرفته یادداشت‌ها
+  - `@POST("api/notes/")` ایجاد یادداشت جدید
+  - `@POST("api/notes/bulk")` ایجاد چندین یادداشت همزمان
+  - `@GET("api/notes/{id}/")` دریافت یادداشت خاص
+  - `@PUT("api/notes/{id}/")` ویرایش کامل یادداشت
+  - `@PATCH("api/notes/{id}/")` ویرایش جزئی یادداشت
+  - `@DELETE("api/notes/{id}/")` حذف یادداشت
 - `@Query` برای پارامترهای query string استفاده می‌شود
-- `@POST("api/notes/")` ایجاد یادداشت جدید
-- `@PUT("api/notes/{id}/")` ویرایش یادداشت موجود
 - `@Path("id")` برای پارامترهای URL استفاده می‌شود
-- `@DELETE("api/notes/{id}/")` حذف یادداشت
 - `@Body` برای ارسال داده در request body
 - `suspend` functions برای عملیات async
 - Retrofit خودکار implementation ایجاد می‌کند
@@ -582,6 +656,47 @@ class NotesViewModel @Inject constructor(
 - `syncNotes()` یادداشت‌ها را با سرور همگام‌سازی می‌کند
 - UI با مشاهده state ها تغییرات را دریافت می‌کند
 
+**`SettingViewModel.kt`** - مدیریت تنظیمات:
+```kotlin
+@HiltViewModel
+class SettingViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
+    private val _userState = MutableStateFlow(UserState())
+    val userState: StateFlow<UserState> = _userState.asStateFlow()
+
+    private val _changePasswordState = MutableStateFlow(ChangePasswordState())
+    val changePasswordState: StateFlow<ChangePasswordState> = _changePasswordState.asStateFlow()
+
+    fun getUserInfo() {
+        viewModelScope.launch {
+            _userState.value = UserState(isLoading = true)
+            val user = authRepository.getUserInfo()
+            _userState.value = UserState(user = user, isSuccess = user != null)
+        }
+    }
+
+    fun changePassword(oldPassword: String, newPassword: String) {
+        viewModelScope.launch {
+            _changePasswordState.value = ChangePasswordState(isLoading = true)
+            val response = authRepository.changePassword(oldPassword, newPassword)
+            _changePasswordState.value = ChangePasswordState(
+                response = response,
+                isSuccess = response != null
+            )
+        }
+    }
+}
+```
+
+**توضیح کامل:**
+- این ViewModel مدیریت تنظیمات کاربر و تغییر رمز عبور را بر عهده دارد
+- `UserState` وضعیت اطلاعات کاربر را نگه می‌دارد
+- `ChangePasswordState` وضعیت تغییر رمز عبور را مدیریت می‌کند
+- `getUserInfo()` اطلاعات کاربر را از سرور دریافت می‌کند
+- `changePassword()` رمز عبور کاربر را تغییر می‌دهد
+- `logout()` کاربر را از حساب خارج می‌کند
+
 #### Navigation (`ui/navigation/`)
 
 **`AppNavHost.kt`** - مدیریت ناوبری:
@@ -718,6 +833,61 @@ fun HomeScreen(navController: NavHostController, viewModel: NotesViewModel) {
 - `NoteCard` کارت نمایش هر یادداشت
 - `onClick` با کلیک روی کارت به صفحه ویرایش می‌رود
 - `navController.navigate()` ناوبری با id یادداشت
+
+**`ChangePasswordScreen.kt`** - صفحه تغییر رمز عبور:
+```kotlin
+@Composable
+fun ChangePasswordScreen(
+    navController: NavHostController,
+    viewModel: SettingViewModel = hiltViewModel()
+) {
+    var oldPassword by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    
+    val changePasswordState by viewModel.changePasswordState.collectAsState()
+
+    Column(
+        modifier = Modifier.fillMaxSize().background(NeutralWhite)
+    ) {
+        StatusBar()
+        
+        NavBar(
+            title = "Change Password",
+            onBackClick = { navController.navigate(NavItem.Setting.route) }
+        )
+
+        InputField(
+            labelText = "Current Password",
+            value = oldPassword,
+            onValueChange = { oldPassword = it },
+            isPassword = true
+        )
+
+        InputField(
+            labelText = "New Password",
+            value = newPassword,
+            onValueChange = { newPassword = it },
+            isPassword = true
+        )
+
+        CustomButton(
+            text = "Change Password",
+            onClick = { viewModel.changePassword(oldPassword, newPassword) }
+        )
+    }
+}
+```
+
+**توضیح کامل:**
+- این صفحه امکان تغییر رمز عبور کاربر را فراهم می‌کند
+- `oldPassword` رمز عبور فعلی
+- `newPassword` رمز عبور جدید
+- `confirmPassword` تأیید رمز عبور جدید
+- `changePasswordState` وضعیت تغییر رمز عبور را مشاهده می‌کند
+- `InputField` فیلدهای ورودی رمز عبور
+- `CustomButton` دکمه تغییر رمز عبور
+- `LaunchedEffect` ناوبری بعد از موفقیت
 
 #### Components (`ui/components/`)
 

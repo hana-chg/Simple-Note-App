@@ -10,6 +10,7 @@ import com.sharif.simplenote.ui.screen.auth.RegisterScreen
 import com.sharif.simplenote.ui.screen.notes.HomeScreen
 import com.sharif.simplenote.ui.screen.notes.NoteEditScreen
 import com.sharif.simplenote.ui.screen.setting.SettingScreen
+import com.sharif.simplenote.ui.screen.setting.ChangePasswordScreen
 import com.sharif.simplenote.viewModel.AuthViewModel
 
 @Composable
@@ -37,6 +38,9 @@ fun AppNavHost(navController: NavHostController) {
         }
         composable(NavItem.Setting.route) {
             SettingScreen(navController = navController, viewModel = hiltViewModel())
+        }
+        composable(NavItem.ChangePassword.route) {
+            ChangePasswordScreen(navController = navController, viewModel = hiltViewModel())
         }
     }
 }
