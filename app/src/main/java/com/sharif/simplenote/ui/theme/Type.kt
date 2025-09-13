@@ -17,6 +17,17 @@ val interFamily = FontFamily(
     Font(R.font.inter_bold, FontWeight.Bold)
 )
 
+val Typography = Typography(
+    // Define the default text style
+    bodyLarge = TextStyle(
+        fontFamily = interFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+)
+
 
 object AppTypography {
     val textXsRegular = TextStyle(
@@ -27,16 +38,11 @@ object AppTypography {
     )
 
     val textXsMedium = TextStyle(
-        fontSize = 10.sp,
-        fontWeight = FontWeight.Medium,
-        lineHeight = 10.sp
+        fontSize = 10.sp, fontWeight = FontWeight.Medium, lineHeight = 10.sp
     )
 
     val textXsBold = TextStyle(
-        fontSize = 10.sp,
-        fontFamily = interFamily,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 10.sp
+        fontSize = 10.sp, fontFamily = interFamily, fontWeight = FontWeight.Bold, lineHeight = 10.sp
     )
 
     // Text 2XS
@@ -55,10 +61,7 @@ object AppTypography {
     )
 
     val text2xsBold = TextStyle(
-        fontSize = 12.sp,
-        fontFamily = interFamily,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 12.sp
+        fontSize = 12.sp, fontFamily = interFamily, fontWeight = FontWeight.Bold, lineHeight = 12.sp
     )
 
     // Text SM
@@ -121,10 +124,7 @@ object AppTypography {
     )
 
     val textLgBold = TextStyle(
-        fontSize = 20.sp,
-        fontFamily = interFamily,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 28.sp
+        fontSize = 20.sp, fontFamily = interFamily, fontWeight = FontWeight.Bold, lineHeight = 28.sp
     )
 
     // Text XI
@@ -187,9 +187,6 @@ object AppTypography {
     )
 
     val text3xiBold = TextStyle(
-        fontFamily = interFamily,
-        fontSize = 40.sp,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 44.sp
+        fontFamily = interFamily, fontSize = 40.sp, fontWeight = FontWeight.Bold, lineHeight = 44.sp
     )
 }
